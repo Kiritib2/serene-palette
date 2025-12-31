@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/dashboard/Header";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { StatsCard } from "@/components/dashboard/StatsCard";
@@ -9,8 +10,17 @@ import { NetworkMonitor } from "@/components/dashboard/NetworkMonitor";
 import { Shield, AlertTriangle, CheckCircle, Activity, Link2, Bot, Network } from "lucide-react";
 
 export default function Index() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Handle tab changes with navigation
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    if (tab === "phishing") navigate("/url-scanner");
+    else if (tab === "bot") navigate("/bot-detection");
+    else if (tab === "network") navigate("/network-analysis");
+  };
 
   const handlePhishingScan = async (url: string) => {
     const suspiciousWords = ['login', 'secure', 'account', 'verify', 'signin', 'banking', 'confirm', 'update'];
@@ -66,7 +76,7 @@ export default function Index() {
     <div className="flex min-h-screen bg-background">
       <Sidebar
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
       />
